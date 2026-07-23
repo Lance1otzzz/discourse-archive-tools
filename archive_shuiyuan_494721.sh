@@ -8,7 +8,7 @@ export PYTHONUTF8="${PYTHONUTF8:-1}"
 TARGET_URL="https://shuiyuan.sjtu.edu.cn/t/topic/494721"
 OUT_DIR="${OUT_DIR:-$HOME/shuiyuan_topic_494721_main_posts_recursive_archive}"
 MAX_DEPTH="${MAX_DEPTH:-2}"
-DELAY="${DELAY:-1.5}"
+DELAY="${DELAY:-0.5}"
 MAX_PAGES="${MAX_PAGES:-0}"
 
 if [[ -z "${DISCOURSE_USER_API_KEY:-}" && -z "${COOKIES_FILE:-}" ]]; then
