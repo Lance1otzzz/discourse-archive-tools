@@ -66,30 +66,14 @@ uv sync
 python -m pip install cryptography
 ```
 
-如果你的电脑不认 `python`，但认 `python3`，就执行：
-
-```bash
-python3 -m pip install cryptography
-```
-
-Windows 上如果 `python` 不可用，但 `py` 可用，就执行：
-
-```cmd
-py -m pip install cryptography
-```
-
-这一步只需要成功执行一次。以后再运行工具时可以跳过。
-
 后面的命令里：
 
 - 有 `uv`：使用 `uv run python ...`
 - 没有 `uv`：把 `uv run python` 换成 `python`
-- 如果你的系统只认 `python3`：把 `uv run python` 换成 `python3`
-- Windows 如果只认 `py`：把 `uv run python` 换成 `py`
 
 ## 第三步：申请水源 User API Key
 
-在工具目录里执行下面这一行。这个命令在 bash、zsh、fish、PowerShell、cmd 里都可以用：
+在工具目录里执行下面这一行：
 
 ```bash
 uv run python request_user_api_key.py --site-url https://shuiyuan.sjtu.edu.cn --application-name "Personal Discourse Archive" --scopes read
@@ -120,11 +104,9 @@ key=...
 
 `key=` 后面的内容就是你的水源 API Key。
 
-注意：不要把 API Key 发给别人。如果不小心泄露了，去水源“偏好设置 -> 安全性”页面撤销它，然后重新申请。
+注意：不要把 API Key 发给别人。
 
 ## 第四步：把 API Key 放进当前终端
-
-下面四组命令只选一组，按你的终端类型执行。
 
 ### bash 或 zsh
 
@@ -132,13 +114,6 @@ key=...
 read -rsp "Discourse User API key: " DISCOURSE_USER_API_KEY
 export DISCOURSE_USER_API_KEY
 printf '\n'
-```
-
-### fish
-
-```fish
-read -s -gx -P "Discourse User API key: " DISCOURSE_USER_API_KEY
-echo
 ```
 
 ### PowerShell / pwsh
@@ -155,65 +130,9 @@ set /p DISCOURSE_USER_API_KEY=Discourse User API key:
 
 执行后，把刚才 `key=` 后面的内容粘贴进去，按回车。
 
-说明：PowerShell 和 cmd 里输入时可能会显示出来，注意不要录屏或发给别人。
 
-## 第五步：先小规模测试
 
-建议先跑一个小测试，确认能正常下载。
-
-### bash、zsh 或 fish
-
-有 `uv` 时可以用快捷脚本：
-
-```bash
-MAX_PAGES=50 OUT_DIR=~/shuiyuan_topic_494721_test ./archive_shuiyuan_494721.sh
-```
-
-没有 `uv` 时，不要用上面的 `.sh` 脚本，直接执行：
-
-```bash
-env PYTHONUTF8=1 python discourse_archiver.py "https://shuiyuan.sjtu.edu.cn/t/topic/494721" --root "https://shuiyuan.sjtu.edu.cn" --out ~/shuiyuan_topic_494721_test --max-depth 2 --first-post-only --topic-links-only --delay 1.5 --max-pages 50
-```
-
-如果你的系统只认 `python3`，把上面的 `python` 换成 `python3`。
-
-### PowerShell / pwsh
-
-```powershell
-$env:PYTHONUTF8 = "1"
-uv run python .\discourse_archiver.py "https://shuiyuan.sjtu.edu.cn/t/topic/494721" --root "https://shuiyuan.sjtu.edu.cn" --out "$HOME\shuiyuan_topic_494721_test" --max-depth 2 --first-post-only --topic-links-only --delay 1.5 --max-pages 50
-```
-
-没有 `uv` 时，把第二行开头的 `uv run python` 换成 `python`：
-
-```powershell
-$env:PYTHONUTF8 = "1"
-python .\discourse_archiver.py "https://shuiyuan.sjtu.edu.cn/t/topic/494721" --root "https://shuiyuan.sjtu.edu.cn" --out "$HOME\shuiyuan_topic_494721_test" --max-depth 2 --first-post-only --topic-links-only --delay 1.5 --max-pages 50
-```
-
-### cmd
-
-```cmd
-set PYTHONUTF8=1
-uv run python discourse_archiver.py "https://shuiyuan.sjtu.edu.cn/t/topic/494721" --root "https://shuiyuan.sjtu.edu.cn" --out "%USERPROFILE%\shuiyuan_topic_494721_test" --max-depth 2 --first-post-only --topic-links-only --delay 1.5 --max-pages 50
-```
-
-没有 `uv` 时，把第二行开头的 `uv run python` 换成 `python`：
-
-```cmd
-set PYTHONUTF8=1
-python discourse_archiver.py "https://shuiyuan.sjtu.edu.cn/t/topic/494721" --root "https://shuiyuan.sjtu.edu.cn" --out "%USERPROFILE%\shuiyuan_topic_494721_test" --max-depth 2 --first-post-only --topic-links-only --delay 1.5 --max-pages 50
-```
-
-测试结果目录：
-
-```text
-shuiyuan_topic_494721_test
-```
-
-如果没有明显报错，就可以跑完整归档。
-
-## 第六步：运行完整归档
+## 第五步：运行完整归档
 
 ### bash、zsh 或 fish
 
@@ -229,7 +148,6 @@ shuiyuan_topic_494721_test
 env PYTHONUTF8=1 python discourse_archiver.py "https://shuiyuan.sjtu.edu.cn/t/topic/494721" --root "https://shuiyuan.sjtu.edu.cn" --out ~/shuiyuan_topic_494721_main_posts_recursive_archive --max-depth 2 --first-post-only --topic-links-only --delay 1.5
 ```
 
-如果你的系统只认 `python3`，把上面的 `python` 换成 `python3`。
 
 ### PowerShell / pwsh
 
@@ -353,14 +271,6 @@ summary.json
 
 ## 常见问题
 
-### 提示 `read: -rsp: 未知选项`
-
-说明你不是 bash/zsh，多半是 fish。请用 fish 版本命令：
-
-```fish
-read -s -gx -P "Discourse User API key: " DISCOURSE_USER_API_KEY
-echo
-```
 
 ### 提示没有 API Key
 
@@ -373,16 +283,6 @@ echo
 ### 下载很慢
 
 这是正常的。脚本默认会放慢请求速度，避免给水源服务器造成压力。
-
-### 我只想抓起始帖，不想递归
-
-bash、zsh 或 fish，有 `uv` 时：
-
-```bash
-MAX_DEPTH=0 ./archive_shuiyuan_494721.sh
-```
-
-没有 `uv` 时，以及 PowerShell/cmd：把完整归档命令里的 `--max-depth 2` 改成 `--max-depth 0`。
 
 ### 我不小心泄露了 API Key
 
